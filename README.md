@@ -1,56 +1,56 @@
-# Welcome to MDN Web Docs
+# Content Management Tool
 
-![github-profile](https://user-images.githubusercontent.com/10350960/166113119-629295f6-c282-42c9-9379-af2de5ad4338.png)
+Metricool-style app: **Dashboard** (stats + platform toggles), **Content planner** (schedule & publish), **Idea generator** (niche analysis + bounce ideas).
 
-[MDN Web Docs][] is an open-source, collaborative project that documents web technologies including CSS, HTML, JavaScript, and Web APIs.
-Alongside detailed reference documentation, we provide extensive learning resources for students and beginners getting started with web development.
+## Stack
 
-## MDN's mission
+- **Next.js** (App Router), **Vercel**, **Tailwind**, **shadcn UI**, dark mode
+- **Auth:** Clerk
+- **DB:** Supabase
 
-MDN's mission is to provide a blueprint for a better internet and empower a new generation of developers and content creators to build it.
+The app lives at the repo root. Deploy to Vercel from this directory.
 
-The strength of MDN Web Docs lies in its vast community of active readers and contributors.
-Since 2005, approximately 45,000 contributors have created the documentation we know and love.
-Together, contributors have created over 45,000 documents that make up an up-to-date, comprehensive, and free resource for web developers worldwide.
+## Getting started
 
-In addition to English-language articles, over 35 volunteers lead translation and localization efforts for Chinese, French, Japanese, Korean, Portuguese, Russian, and Spanish.
+1. **Copy env and fill in secrets**
 
-## Build the site
+   ```bash
+   cp .env.example .env.local
+   ```
 
-To set up the site locally, you need to have [Node.js](https://nodejs.org/) installed, which comes bundled with [npm](https://www.npmjs.com/).
-You can check if these are installed by running the following commands:
+   Set:
 
-```bash
-node -v
-npm -v
-```
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` from [Clerk](https://dashboard.clerk.com)
+   - `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from [Supabase](https://supabase.com/dashboard) (Project Settings → API)
 
-After you have installed Node.js, you can install the dependencies using `npm install` and start the local preview:
+2. **Supabase schema**
 
-```bash
-npm i
-npm start
-```
+   Run the migration in `supabase/migrations/` against your Supabase project (e.g. via Supabase CLI or Dashboard SQL editor).
 
-Once started, a live preview is available at `http://localhost:5042/`.
+3. **Install and run**
 
-## Contribute to MDN Web Docs
+   ```bash
+   npm install --ignore-engines
+   npm run dev
+   ```
 
-You can contribute to MDN Web Docs and be a part of our community through content contributions, engineering, or translation work.
-The MDN Web Docs project welcomes contributions from everyone who shares our goals and wants to contribute constructively and respectfully within our community.
+   Open [http://localhost:3000](http://localhost:3000). You’ll be redirected to sign-in, then to `/dashboard`.
 
-To find out how to get started, see the [CONTRIBUTING.md](CONTRIBUTING.md) document in this repository.
-By participating in and contributing to our projects and discussions, you acknowledge that you have read and agree to our [Code of Conduct](CODE_OF_CONDUCT.md), which means adhering to [Mozilla's Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
+## Routes
 
-## Get in touch
+- `/` → redirects to `/dashboard`
+- `/dashboard` — stats (placeholder in Phase 1)
+- `/planner` — content scheduling (placeholder in Phase 1)
+- `/ideas` — idea generator (placeholder in Phase 1)
+- `/sign-in`, `/sign-up` — Clerk auth
 
-You can communicate with the MDN Web Docs team and community using the [communication channels][].
+All of `/dashboard`, `/planner`, and `/ideas` require sign-in.
 
-<!---
-Reference links syntax is used here because of linting markdown files ("fqdn-moz-links" rule).
-See https://github.com/mdn/content/pull/21432 and https://github.com/mdn/content/pull/38369.
-It can be replaced with the normal links syntax after successfully closing https://github.com/DavidAnson/markdownlint/issues/673.
--->
+## Env and secrets
 
-[mdn web docs]: https://developer.mozilla.org
-[communication channels]: https://developer.mozilla.org/en-US/docs/MDN/Community/Communication_channels
+- **Public (client):** `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Supabase anon key is safe to expose; use RLS).
+- **Server-only:** `CLERK_SECRET_KEY`, and optionally `SUPABASE_SERVICE_ROLE_KEY`. Never use `NEXT_PUBLIC_` for these.
+
+## Roadmap
+
+See `.planning/ROADMAP.md` for phases. Phase 1 (Foundation) is implemented.
