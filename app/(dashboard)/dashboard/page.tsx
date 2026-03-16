@@ -1,25 +1,32 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { auth } from "@clerk/nextjs/server";
+import { getDashboardData } from "@/lib/dashboard";
+import { DashboardContent } from "./dashboard-content";
 
-export default function DashboardPage() {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight">Dashboard</h2>
-        <p className="text-muted-foreground">
-          Your stats and performance across connected platforms.
-        </p>
+type PageProps = {
+  searchParams: Promise<{ connected?: string; error?: string }>;
+};
+
+export default async function DashboardPage({ searchParams }: PageProps) {
+  const { userId } = await auth();
+  const resolved = await searchParams;
+
+  if (!userId) {
+    return (
+      <div className="space-y-6">
+        <p className="text-muted-foreground">Sign in to view your dashboard.</p>
       </div>
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-medium">Overview</h3>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            Connect your accounts in a future phase to see combined and
-            per-platform statistics here.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+    );
+  }
+
+  const { accounts, totalSubscribers, totalViews } =
+    await getDashboardData(userId);
+
+  return (
+    <DashboardContent
+      accounts={accounts}
+      totalSubscribers={totalSubscribers}
+      totalViews={totalViews}
+      searchParams={resolved}
+    />
   );
 }

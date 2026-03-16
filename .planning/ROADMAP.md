@@ -66,12 +66,14 @@
 
 **Goal:** Users see stats from 1–2 connected platforms and can toggle platforms to view combined totals.
 
-**Objective:** Dashboard page with platform toggles and combined stats, backed by at least one (preferably two) platform APIs for analytics.
+**Decisions (locked in):** **First platform:** YouTube · **Token storage:** Supabase (e.g. `connected_accounts` table; tokens keyed by Clerk user id). Second platform TBD (e.g. Instagram or X) after YouTube is working.
+
+**Objective:** Dashboard page with platform toggles and combined stats, backed by YouTube first, then optionally a second platform.
 
 **Deliverables:**
 
-- **Connected accounts:** Model and UI to connect and store OAuth tokens for 1–2 platforms (e.g. Instagram + Facebook, or YouTube, or X — choose per research tier; see `.planning/research/social-platform-apis.md`).
-- **Stats fetch:** Server-side fetch of common metrics (e.g. followers, impressions, engagement) per platform using official APIs only.
+- **Connected accounts:** OAuth for **YouTube first**; store access/refresh tokens in **Supabase** (`connected_accounts` or similar; RLS by user). UI to connect and disconnect; optional second platform later.
+- **Stats fetch:** Server-side fetch of common metrics (e.g. subscribers, views, engagement) from YouTube Data + Analytics APIs; normalize to shared metric set; optional cache (e.g. 15–30 min) in Supabase to respect quota.
 - **Dashboard page:** Table and/or charts (e.g. shadcn + Recharts) showing per-platform metrics; references: nextjs-vercel-shadcn-dashboard (Tables, Charts).
 - **Platform toggles:** UI to enable/disable platforms; combined totals (e.g. total followers, total engagement) computed from enabled platforms only.
 - **Empty/error states:** No accounts connected; API errors or token expiry handled with clear messaging.
@@ -271,9 +273,9 @@ Rationale: Foundation first; dashboard can proceed in parallel with planner desi
 | Phase | Status   | Notes |
 |-------|----------|--------|
 | 1. Foundation | Done | App at root; Clerk, Supabase, (dashboard) routes, loading/error, dark theme |
-| 2. Dashboard | Not started | — |
-| 3. Content model & planner UI | Not started | — |
-| 4. Scheduler & first platform | Not started | — |
-| 5. Media & calendar | Not started | — |
+| 2. Dashboard | Done | YouTube OAuth, tokens in Supabase, stats + toggles + combined totals |
+| 3. Content model & planner UI | Done | DB, actions, planner form + list, Schedule sets scheduled_at + state |
+| 4. Scheduler & first platform | Done | Inngest cron + content/publish; X OAuth + createTweet; publish_results + state |
+| 5. Media & calendar | Done | Vercel Blob upload; planner media UX; react-big-calendar (month/week/agenda); drag-to-reschedule |
 | 6. Retries & multi-platform | Not started | — |
 | 7. Idea generator | Not started | — |

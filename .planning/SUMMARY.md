@@ -59,7 +59,7 @@
 | Topic | Decision |
 |-------|----------|
 | **Auth** | **Clerk**; protect layout/pages and every data access by user (`auth()` server-side). |
-| **DB** | **Supabase**; store users, connected accounts/tokens, scheduled content, platform overrides, ideas/to-dos, optional trend cache. |
+| **DB** | **Supabase**; store users, connected accounts/tokens, scheduled content, platform overrides, ideas/to-dos, optional trend cache. **Phase 2:** OAuth tokens for connected platforms (e.g. YouTube) stored in Supabase; first platform = YouTube. |
 | **Repo** | Next.js app at repo root; deploy from root. |
 | **Secrets** | Platform API keys and tokens server-only; store in env or secure storage; never in client (Clerk publishable key is the only public auth key). |
 | **Job queue** | Inngest (or Vercel Cron + serverless) for scheduled publish and optional idea-generation jobs. |

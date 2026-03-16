@@ -21,7 +21,8 @@ The app lives at the repo root. Deploy to Vercel from this directory.
    Set:
 
    - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` from [Clerk](https://dashboard.clerk.com)
-   - `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from [Supabase](https://supabase.com/dashboard) (Project Settings → API)
+   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` from [Supabase](https://supabase.com/dashboard) (Project Settings → API)
+   - **Phase 2 (Dashboard):** `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from [Google Cloud Console](https://console.cloud.google.com/) (OAuth 2.0 Client ID for YouTube), and `NEXT_PUBLIC_APP_URL` (e.g. `http://localhost:3000` or your production URL)
 
 2. **Supabase schema**
 
@@ -39,7 +40,7 @@ The app lives at the repo root. Deploy to Vercel from this directory.
 ## Routes
 
 - `/` → redirects to `/dashboard`
-- `/dashboard` — stats (placeholder in Phase 1)
+- `/dashboard` — stats from connected platforms (Phase 2: YouTube); connect via “Connect YouTube,” toggle platforms for combined totals
 - `/planner` — content scheduling (placeholder in Phase 1)
 - `/ideas` — idea generator (placeholder in Phase 1)
 - `/sign-in`, `/sign-up` — Clerk auth
@@ -49,8 +50,8 @@ All of `/dashboard`, `/planner`, and `/ideas` require sign-in.
 ## Env and secrets
 
 - **Public (client):** `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Supabase anon key is safe to expose; use RLS).
-- **Server-only:** `CLERK_SECRET_KEY`, and optionally `SUPABASE_SERVICE_ROLE_KEY`. Never use `NEXT_PUBLIC_` for these.
+- **Server-only:** `CLERK_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (required for Phase 2), `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`. Never use `NEXT_PUBLIC_` for these.
 
 ## Roadmap
 
-See `.planning/ROADMAP.md` for phases. Phase 1 (Foundation) is implemented.
+See `.planning/ROADMAP.md` for phases. Phase 1 (Foundation) and Phase 2 (Dashboard, YouTube) are implemented.

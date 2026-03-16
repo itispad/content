@@ -1,25 +1,18 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { auth } from "@clerk/nextjs/server";
+import { getContentList } from "./actions";
+import { PlannerContent } from "./planner-content";
 
-export default function PlannerPage() {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight">Content Planner</h2>
-        <p className="text-muted-foreground">
-          Schedule and publish content across your platforms.
-        </p>
+export default async function PlannerPage() {
+  const { userId } = await auth();
+  if (!userId) {
+    return (
+      <div className="space-y-6">
+        <p className="text-muted-foreground">Sign in to use the planner.</p>
       </div>
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-medium">Schedule</h3>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            The content planner form and calendar will be added in a later
-            phase.
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
+    );
+  }
+
+  const contentList = await getContentList(userId);
+
+  return <PlannerContent contentList={contentList} />;
 }
